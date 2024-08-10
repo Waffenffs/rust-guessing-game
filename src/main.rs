@@ -1,6 +1,7 @@
 use rand::Rng;
 use std::cmp::Ordering;
 use std::io;
+
 fn main() {
     let mut player_lives = 4;
     let secret_number = rand::thread_rng().gen_range(1..=100);
