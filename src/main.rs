@@ -3,40 +3,47 @@ use std::cmp::Ordering;
 use std::io;
 
 fn main() {
-    let mut player_lives = 4;
-    let secret_number = rand::thread_rng().gen_range(1..=100);
+    let mut player_hp = 5;
+    let secret_word = rand::thread_rng().gen_range(1..=100);
 
-    // println!("The secret number is: {}", secret_number);
+    println!("Welome to the guessing game!");
 
     loop {
-        player_lives -= 1;
+        player_hp -= 1;
 
-        if player_lives == 0 {
-            println!("You lost!");
+        if player_hp <= 0 {
+            println!("\nYou lost! Sorry! :(");
             break;
-        }
+        };
 
-        println!("Your remaining lives: {}", player_lives);
-        println!("Please input your guess.");
+        println!("\n**TOTAL REMAINING HP: {}**", player_hp);
+        println!("Enter your guess: ");
 
+        // Where the guess or answer will be stored
         let mut guess = String::new();
 
+        // Prompt the player for a secret word and store it to guess
         io::stdin()
             .read_line(&mut guess)
-            .expect("Cannot read value");
+            .expect("Error reading input");
 
-        let guess: u32 = match guess.trim().parse() {
+        // Attempt to convert the type of guess' value to i32
+        // If it fails, then we don't let the program crash completely
+        // Instead, we let the player keep playing
+        let guess: i32 = match guess.trim().parse() {
             Ok(num) => num,
             Err(_) => continue,
         };
 
-        println!("Your guess: {}", guess);
-
-        match secret_number.cmp(&guess) {
-            Ordering::Less => println!("The secret number is smaller!"),
-            Ordering::Greater => println!("The secret number is greater!"),
+        // Here we compare the values of the guess and the secret word
+        // If the guess is less than the secret word, we print "Secret word is less than {guess}"
+        // If the guess is greater than the secret word, we print "Secret word is greater than {guess}"
+        // If the guess is equal to the secret word, we print "You won! Congrats! :)" and stop the game
+        match secret_word.cmp(&guess) {
+            Ordering::Less => println!("Secret word is less than {}", guess),
+            Ordering::Greater => println!("Secret word is greater than {}", guess),
             Ordering::Equal => {
-                println!("You won!");
+                println!("You won! Congrats! :)");
                 break;
             }
         }
